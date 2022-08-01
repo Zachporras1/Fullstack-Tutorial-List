@@ -3,7 +3,7 @@ import { Tutorial } from '../models/tutorial.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const baseUrl='http://localhost:8080/api/tutorials';
+const baseUrl='http://tutoriallistbackendsql-env.eba-hmqrmjsb.us-east-1.elasticbeanstalk.com/api/tutorials';
 
 @Injectable({
   providedIn: 'root'
