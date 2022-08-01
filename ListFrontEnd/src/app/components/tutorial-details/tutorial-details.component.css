@@ -1,0 +1,13 @@
+.click-details{
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.title-label{
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+h4{
+    font: bolder;
+}

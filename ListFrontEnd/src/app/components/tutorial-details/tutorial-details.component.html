@@ -1,0 +1,56 @@
+<div *ngIf="viewMode; else editable">
+    <div class="click-details" *ngIf="currentTutorial.id">
+        <h4>Tutorial</h4>
+        <div>
+            <label class="title-label"> Title: </label>
+            <p>{{currentTutorial.title}}</p>
+        </div>
+        <div>
+            <label class="title-label"> Description:</label>
+            <p> {{currentTutorial.description}}</p>
+        </div>
+        <div>
+            <label class="title-label"> Status:</label>
+            <p>{{currentTutorial.published? "Published":"Pending"}}</p>
+        </div>
+        <a routerLink="/tutorials/{{currentTutorial.id}}" class="badge badge-warning">Edit</a>
+    </div>
+
+    <div *ngIf="!currentTutorial">
+        <br>
+        <p>Please Click on a Tutorial......</p>
+    </div>
+</div>
+
+<ng-template #editable>
+    <div *ngIf="currentTutorial.id" class="edit-form">
+        <h4>Tutorial</h4>
+
+        <form>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" [(ngModel)]="currentTutorial.title" name="title">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" name="description" id="description" [(ngModel)]="currentTutorial.description">
+            </div>
+            <div class="form-group">
+                <label> Status: </label>
+                {{currentTutorial.published? "Published": "Pending"}}
+            </div>
+        </form>
+        <button class="badge badge-primary mr-2" *ngIf="currentTutorial.published"
+            (click)="updatePublished(false)">UnPublish</button>
+        <button class="badge badge-primary mr-2" *ngIf="!currentTutorial.published" (click)="updatePublished(true)">
+            Publish </button>
+        <button class="badge badge-primary mr-2" (click)="deleteTutorial()"> Delete</button>
+        <button class="badge badge-success mb-2" type="submit" (click)="updateTutorial()"> Update </button>
+        <p> {{message}}</p>
+    </div>
+    <div *ngIf="!currentTutorial.id">
+        <br>
+        <p> Cannot Access this tutorial...</p>
+
+    </div>
+</ng-template>
