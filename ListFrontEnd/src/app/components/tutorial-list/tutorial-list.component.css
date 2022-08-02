@@ -1,0 +1,17 @@
+button:disabled{
+ color: white;
+ background-color: gray;
+}
+
+button{
+    background-color: blue;
+}
+
+.list{
+    margin-top: 2em;
+}
+
+.error{
+    color: red;
+    font-weight: bold;
+}

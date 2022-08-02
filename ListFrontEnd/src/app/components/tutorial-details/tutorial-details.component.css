@@ -10,4 +10,9 @@
 
 h4{
     font: bolder;
+    text-decoration: underline;
+}
+
+#published{
+    font-size: larger;
 }

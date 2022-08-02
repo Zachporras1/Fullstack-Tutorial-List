@@ -14,7 +14,7 @@ export class TutorialListComponent implements OnInit {
 
   currentindex = -1;
 
-  title = '';
+  title :any;
 
   constructor(private tutorialService: TutorialService) {}
 

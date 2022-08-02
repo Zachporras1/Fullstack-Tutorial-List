@@ -24,20 +24,20 @@
 
 <ng-template #editable>
     <div *ngIf="currentTutorial.id" class="edit-form">
-        <h4>Tutorial</h4>
+        <h4>Update Tutorial</h4>
 
         <form>
             <div class="form-group">
-                <label for="title">Title</label>
+                <label for="title">Title:</label>
                 <input type="text" class="form-control" id="title" [(ngModel)]="currentTutorial.title" name="title">
             </div>
             <div class="form-group">
-                <label for="description">Description</label>
-                <input type="text" name="description" id="description" [(ngModel)]="currentTutorial.description">
+                <label for="description">Description:</label>
+                <input class="form-control" type="text" name="description" id="description" [(ngModel)]="currentTutorial.description">
             </div>
             <div class="form-group">
                 <label> Status: </label>
-                {{currentTutorial.published? "Published": "Pending"}}
+             <p id="published">  {{currentTutorial.published? "Published": "Pending"}} </p>
             </div>
         </form>
         <button class="badge badge-primary mr-2" *ngIf="currentTutorial.published"

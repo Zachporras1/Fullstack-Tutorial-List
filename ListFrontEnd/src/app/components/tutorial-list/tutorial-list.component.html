@@ -1,16 +1,24 @@
 <div class="list row">
     <div class="col-md-8">
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search by Title" [(ngModel)]="title" />
+            <input type="text" required  class="form-control" placeholder="Search by Title" [(ngModel)]="title" #name="ngModel"/>
+            
+ 
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" (click)="searchTitle()">
+                <button class="btn btn-outline-secondary" type="button" [disabled]="name.errors?.['required']" (click)="searchTitle()">
                     Search
                 </button>
+                <button class="btn btn-outline-secondary" type="button"  (click)="reloadList()">
+                Reset
+                </button>
             </div>
-        </div>
+            
+        </div> 
+         <div  class="error" *ngIf=" name.errors?.['required'] && name.touched" > Error Cannot Be Blank</div>
+    
     </div>
-
-    <div class="col-md-6">
+   
+    <div class=" list col-md-6">
         <h4>Tutorial List</h4>
         <ul class="list-group">
            <li class="list-group-item" *ngFor="let tutorial of tutorials; let i =index" [class.active]="i==currentindex" (click)="setActiveTutorial(tutorial,i)">
