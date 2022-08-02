@@ -3,9 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
 import { TutorialListComponent } from './components/tutorial-list/tutorial-list.component';
 import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-{path:'', redirectTo:'tutorials', pathMatch:'full'},
+{path:'', redirectTo:'home', pathMatch:'full'},
+{path:'home', component:HomeComponent},
 {path:'tutorials', component:TutorialListComponent},
 {path:'tutorials/:id', component:TutorialDetailsComponent},
 {path:'add', component:AddTutorialComponent}

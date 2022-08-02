@@ -8,6 +8,7 @@ import { TutorialDetailsComponent } from './components/tutorial-details/tutorial
 import { TutorialListComponent } from './components/tutorial-list/tutorial-list.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { HomeComponent } from './components/home/home.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
     AppComponent,
     AddTutorialComponent,
     TutorialDetailsComponent,
-    TutorialListComponent
+    TutorialListComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

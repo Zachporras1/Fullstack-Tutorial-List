@@ -1,0 +1,18 @@
+
+
+h1,.body-text{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+h1{
+    margin-top: 2em;
+    text-decoration: underline;
+}
+
+.body-text{
+        margin-top: 2em;
+       
+        
+}
