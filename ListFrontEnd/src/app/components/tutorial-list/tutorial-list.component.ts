@@ -70,7 +70,6 @@ export class TutorialListComponent implements OnInit {
 
       console.log(data)
       this.reloadList();
-
     } )
 
   }
@@ -78,6 +77,4 @@ export class TutorialListComponent implements OnInit {
   reloadList(){
     window.location.reload();
   }
-
-
 }

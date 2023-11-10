@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -19,6 +21,8 @@ public class TutorialController {
 
     @Autowired
     TutorialRepository tutorialRepository;
+
+    Logger logger;
 
     public TutorialController(TutorialRepository tutorialRepository) {
         this.tutorialRepository = tutorialRepository;
@@ -37,15 +41,12 @@ public class TutorialController {
             }
             if (tutorials.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
             }
             return new ResponseEntity<>(tutorials,HttpStatus.OK);
-
         }
         catch (Exception e){
             return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @GetMapping("/tutorials/{id}")
@@ -63,7 +64,7 @@ public class TutorialController {
     @PostMapping("/tutorials")
     public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial){
         try{
-            Tutorial _tutorial=tutorialRepository.save(new Tutorial(tutorial.getTitle(),tutorial.getDescription(),false));
+            Tutorial _tutorial=tutorialRepository.save(new Tutorial(tutorial.getTitle(),tutorial.getDescription(),false,tutorial.getName()));
 
             return new ResponseEntity<>(_tutorial,HttpStatus.CREATED);
         }
@@ -81,6 +82,7 @@ public class TutorialController {
             updatedTutorial.setTitle(tutorial.getTitle());
             updatedTutorial.setDescription(tutorial.getDescription());
             updatedTutorial.setPublished(tutorial.isPublished());
+            updatedTutorial.setName(tutorial.getName());
 
             return  new ResponseEntity<>(tutorialRepository.save(updatedTutorial), HttpStatus.OK);
         }

@@ -14,7 +14,8 @@ export class TutorialDetailsComponent implements OnInit {
   @Input() currentTutorial: Tutorial = {
     title: '',
     description: '',
-    published: false
+    published: false,
+    name:''
   };
 
   message='';
@@ -49,7 +50,8 @@ updatePublished(status:boolean):void{
   const data={
     title:this.currentTutorial.title,
     description:this.currentTutorial.description,
-    published:status
+    published:status,
+    name:this.currentTutorial.name
     };
 
     this.message=''

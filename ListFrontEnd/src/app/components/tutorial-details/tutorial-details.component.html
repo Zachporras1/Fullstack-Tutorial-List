@@ -13,6 +13,10 @@
             <label class="title-label"> Status:</label>
             <p>{{currentTutorial.published? "Published":"Pending"}}</p>
         </div>
+        <div>
+            <label class="title-">Name:</label>
+            <p>{{currentTutorial.name}}</p>
+        </div>
         <a routerLink="/tutorials/{{currentTutorial.id}}" class="badge badge-warning">Edit</a>
     </div>
 
@@ -34,6 +38,10 @@
             <div class="form-group">
                 <label for="description">Description:</label>
                 <input class="form-control" type="text" name="description" id="description" [(ngModel)]="currentTutorial.description">
+            </div>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" name="name" id="name" [(ngModel)]="currentTutorial.name">
             </div>
             <div class="form-group">
                 <label> Status: </label>

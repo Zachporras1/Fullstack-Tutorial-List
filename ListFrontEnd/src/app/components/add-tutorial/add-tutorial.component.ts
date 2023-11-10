@@ -12,7 +12,8 @@ export class AddTutorialComponent implements OnInit {
   tutorial:Tutorial={
     title:'',
     description:'',
-    published:false
+    published:false,
+    name:''
   }
   submitted= false;
 
@@ -26,7 +27,8 @@ export class AddTutorialComponent implements OnInit {
 
     const data={
       title:this.tutorial.title,
-      description:this.tutorial.description
+      description:this.tutorial.description,
+      name:this.tutorial.name
     }
 
     this.tutorialService.createTutorial(data).subscribe({
@@ -44,10 +46,8 @@ export class AddTutorialComponent implements OnInit {
     this.tutorial={
       title:'',
       description:'',
-      published:false
+      published:false,
+      name:''
     };
-
-    
   }
-
 }

@@ -15,6 +15,12 @@
                     [(ngModel)]="tutorial.description" #desc="ngModel" />
                     <div *ngIf="desc.errors?.['required'] && desc.touched">Description Cannot Be Blank </div>
             </div>
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" class="form-control" name="name" id="name" required
+                    [(ngModel)]="tutorial.name" #desc="ngModel" />
+                    <div *ngIf="desc.errors?.['required'] && desc.touched">Description Cannot Be Blank </div>
+            </div>
             <button  (click)="saveTutorial()" class="btn btn-success" [disabled]="name.errors?.['required'] || desc.errors?.['required']" >Submit</button>
         </div>
         </form>
