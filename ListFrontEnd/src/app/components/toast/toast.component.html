@@ -1,0 +1,15 @@
+<div class="toast-container">
+  <div
+    *ngFor="let toast of toasts"
+    class="toast-item alert d-flex justify-content-between align-items-center"
+    [class.alert-success]="toast.type === 'success'"
+    [class.alert-danger]="toast.type === 'error'"
+    [class.alert-info]="toast.type === 'info'"
+    role="alert"
+  >
+    <span>{{ toast.message }}</span>
+    <button type="button" class="close ml-3" aria-label="Dismiss" (click)="dismiss(toast.id)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>

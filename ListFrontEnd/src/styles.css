@@ -1,6 +1,6 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 
-
-body{
-    background-color: rgb(136, 156, 227);
+body {
+  background-color: rgb(136, 156, 227);
+  padding-bottom: 60px;
 }

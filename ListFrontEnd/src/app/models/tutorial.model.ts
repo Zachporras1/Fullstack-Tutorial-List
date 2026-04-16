@@ -1,10 +1,17 @@
-import { AnonymousSubject } from "rxjs/internal/Subject";
+export interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  first: boolean;
+  last: boolean;
+}
 
 export class Tutorial {
-
-    id?:any;
-    title?:string;
-    description?:string;
-    published?:boolean;
-    name?:string;
+  id?: number;
+  title?: string;
+  description?: string;
+  published?: boolean;
+  name?: string;
 }

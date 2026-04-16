@@ -1,33 +1,126 @@
-<div class="list row">
+<div class="list-page">
+
+  <!-- Search bar -->
+  <div class="row mb-3">
     <div class="col-md-8">
-        <div class="input-group mb-3">
-            <input type="text" required  class="form-control" placeholder="Search by Title" [(ngModel)]="title" #name="ngModel"/>
-            
- 
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" [disabled]="name.errors?.['required']" (click)="searchTitle()">
-                    Search
-                </button>
-                <button class="btn btn-outline-secondary" type="button"  (click)="reloadList()">
-                Reset
-                </button>
-            </div>
-            
-        </div> 
-         <div  class="error" *ngIf=" name.errors?.['required'] && name.touched" > Error Cannot Be Blank</div>
-    
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search by title (live search)..."
+          [(ngModel)]="title"
+          (ngModelChange)="onSearchInput($event)"
+          aria-label="Search tutorials by title"
+        />
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" (click)="refreshList()" aria-label="Reset search">
+            Reset
+          </button>
+        </div>
+      </div>
     </div>
-   
-    <div class=" list col-md-6">
-        <h4>Tutorial List</h4>
-        <ul class="list-group">
-           <li class="list-group-item" *ngFor="let tutorial of tutorials; let i =index" [class.active]="i==currentindex" (click)="setActiveTutorial(tutorial,i)">
-            {{tutorial.title}}
-           </li>
-        </ul>
+  </div>
 
-        <app-tutorial-details [viewMode]="true" [currentTutorial]="currentTutorial">
-
-        </app-tutorial-details>
+  <!-- Filter tabs + Delete All -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="filter-tabs">
+      <button
+        class="btn btn-sm mr-2"
+        [class.btn-primary]="activeFilter === 'all'"
+        [class.btn-outline-primary]="activeFilter !== 'all'"
+        (click)="setFilter('all')"
+      >All</button>
+      <button
+        class="btn btn-sm"
+        [class.btn-success]="activeFilter === 'published'"
+        [class.btn-outline-success]="activeFilter !== 'published'"
+        (click)="setFilter('published')"
+      >Published</button>
     </div>
+    <button
+      class="btn btn-sm btn-danger"
+      (click)="removeAllTutorials()"
+      [disabled]="tutorials.length === 0 || isLoading"
+      aria-label="Delete all tutorials"
+    >Delete All</button>
+  </div>
+
+  <div class="row">
+
+    <!-- Tutorial list column -->
+    <div class="col-md-6">
+      <h4>
+        Tutorials
+        <span class="badge badge-secondary ml-1">{{ totalElements }}</span>
+      </h4>
+
+      <!-- Loading -->
+      <div *ngIf="isLoading" class="text-center py-4" aria-live="polite">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div *ngIf="!isLoading && tutorials.length === 0" class="empty-state text-center py-4">
+        <p class="text-muted mb-1">No tutorials found.</p>
+        <small class="text-muted" *ngIf="title">Try a different search term or reset the filter.</small>
+      </div>
+
+      <!-- List -->
+      <ul class="list-group" *ngIf="!isLoading && tutorials.length > 0" role="listbox">
+        <li
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+          *ngFor="let tutorial of tutorials; let i = index"
+          [class.active]="i === currentindex"
+          (click)="setActiveTutorial(tutorial, i)"
+          role="option"
+          [attr.aria-selected]="i === currentindex"
+          style="cursor: pointer;"
+        >
+          <span>{{ tutorial.title }}</span>
+          <div class="d-flex align-items-center">
+            <span
+              class="badge mr-2"
+              [class.badge-success]="tutorial.published"
+              [class.badge-secondary]="!tutorial.published"
+            >{{ tutorial.published ? 'Published' : 'Draft' }}</span>
+            <button
+              class="btn btn-sm btn-outline-danger"
+              (click)="deleteSingleTutorial(tutorial.id!); $event.stopPropagation()"
+              aria-label="Delete tutorial"
+              title="Delete"
+            >&times;</button>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Pagination -->
+      <div
+        class="d-flex justify-content-between align-items-center mt-3"
+        *ngIf="!isLoading && totalPages > 1"
+      >
+        <button
+          class="btn btn-sm btn-outline-primary"
+          (click)="previousPage()"
+          [disabled]="currentPage === 0"
+        >&larr; Prev</button>
+        <span class="text-muted small">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+        <button
+          class="btn btn-sm btn-outline-primary"
+          (click)="nextPage()"
+          [disabled]="currentPage >= totalPages - 1"
+        >Next &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Detail panel column -->
+    <div class="col-md-6">
+      <app-tutorial-details
+        [viewMode]="true"
+        [currentTutorial]="currentTutorial"
+      ></app-tutorial-details>
+    </div>
+
+  </div>
 </div>

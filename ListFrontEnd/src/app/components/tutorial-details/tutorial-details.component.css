@@ -1,18 +1,34 @@
-.click-details{
-    border: 1px solid black;
-    padding: 10px;
+.click-details {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.7);
 }
 
-.title-label{
-    font-weight: bold;
-    text-decoration: underline;
+.edit-form {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 1.5em;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-h4{
-    font: bolder;
-    text-decoration: underline;
+.detail-row {
+  margin-bottom: 0.75em;
 }
 
-#published{
-    font-size: larger;
+.title-label {
+  font-weight: bold;
+  text-decoration: underline;
+  display: block;
+  margin-bottom: 2px;
+}
+
+h4 {
+  font-weight: bolder;
+  text-decoration: underline;
+  margin-bottom: 1em;
+}
+
+.action-buttons .btn {
+  margin-bottom: 4px;
 }

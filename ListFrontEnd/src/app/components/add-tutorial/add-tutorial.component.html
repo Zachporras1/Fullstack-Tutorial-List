@@ -1,32 +1,70 @@
-<div>
+<div class="submit-form mt-3">
 
-        
-    <div class="submit-form">
-        <form name="add-form">     
-        <div *ngIf="!submitted">
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" class="form-control" name="title" id="title" #name="ngModel" required [(ngModel)]="tutorial.title" />
-                <div *ngIf="name.errors?.['required'] && name.touched">Title Cannot Be Blank </div>
-            </div>
-            <div class="form-group">
-                <label for="Description">Description</label>
-                <input type="text" class="form-control" name="description" id="description" required
-                    [(ngModel)]="tutorial.description" #desc="ngModel" />
-                    <div *ngIf="desc.errors?.['required'] && desc.touched">Description Cannot Be Blank </div>
-            </div>
-            <div class="form-group">
-                <label for="Name">Name</label>
-                <input type="text" class="form-control" name="name" id="name" required
-                    [(ngModel)]="tutorial.name" #desc="ngModel" />
-                    <div *ngIf="desc.errors?.['required'] && desc.touched">Description Cannot Be Blank </div>
-            </div>
-            <button  (click)="saveTutorial()" class="btn btn-success" [disabled]="name.errors?.['required'] || desc.errors?.['required']" >Submit</button>
+  <div *ngIf="!submitted">
+    <h4 class="mb-3">Add New Tutorial</h4>
+    <form name="add-form">
+
+      <div class="form-group">
+        <label for="title">Title <span class="text-danger">*</span></label>
+        <input
+          type="text"
+          class="form-control"
+          name="title"
+          id="title"
+          #titleRef="ngModel"
+          required
+          [(ngModel)]="tutorial.title"
+          placeholder="Enter tutorial title"
+        />
+        <div class="text-danger small mt-1" *ngIf="titleRef.errors?.['required'] && titleRef.touched">
+          Title cannot be blank.
         </div>
-        </form>
-        <div *ngIf="submitted">
-            <h4>Tutorial Was Added!!</h4>
-            <button class="btn btn-success" (click)="newTutorial()" >Add</button>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input
+          type="text"
+          class="form-control"
+          name="description"
+          id="description"
+          [(ngModel)]="tutorial.description"
+          placeholder="Enter tutorial description (optional)"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="name">Author Name <span class="text-danger">*</span></label>
+        <input
+          type="text"
+          class="form-control"
+          name="name"
+          id="name"
+          #nameRef="ngModel"
+          required
+          [(ngModel)]="tutorial.name"
+          placeholder="Enter author name"
+        />
+        <div class="text-danger small mt-1" *ngIf="nameRef.errors?.['required'] && nameRef.touched">
+          Author name cannot be blank.
         </div>
-    </div>
+      </div>
+
+      <button
+        (click)="saveTutorial()"
+        class="btn btn-success"
+        [disabled]="titleRef.errors?.['required'] || nameRef.errors?.['required'] || isLoading"
+        aria-label="Submit tutorial"
+      >
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-1" role="status"></span>
+        {{ isLoading ? 'Saving...' : 'Submit' }}
+      </button>
+    </form>
+  </div>
+
+  <div *ngIf="submitted" class="text-center py-4">
+    <h4 class="text-success">Tutorial Added!</h4>
+    <button class="btn btn-primary mt-2" (click)="newTutorial()">Add Another</button>
+  </div>
+
 </div>
