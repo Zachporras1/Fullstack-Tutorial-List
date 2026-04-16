@@ -1,132 +1,82 @@
 package com.ust.backendlistdata.controller;
 
-import com.ust.backendlistdata.model.Tutorial;
-import com.ust.backendlistdata.repository.TutorialRepository;
-import org.apache.catalina.LifecycleState;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ust.backendlistdata.dto.TutorialRequest;
+import com.ust.backendlistdata.dto.TutorialResponse;
+import com.ust.backendlistdata.service.TutorialService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class TutorialController {
 
-    @Autowired
-    TutorialRepository tutorialRepository;
+    private static final Logger logger = LoggerFactory.getLogger(TutorialController.class);
 
-    Logger logger;
+    private final TutorialService tutorialService;
 
-    public TutorialController(TutorialRepository tutorialRepository) {
-        this.tutorialRepository = tutorialRepository;
+    public TutorialController(TutorialService tutorialService) {
+        this.tutorialService = tutorialService;
+    }
+
+    // Must be declared before /tutorials/{id} so Spring matches it first
+    @GetMapping("/tutorials/published")
+    public ResponseEntity<Page<TutorialResponse>> getPublishedTutorials(Pageable pageable) {
+        logger.debug("GET /tutorials/published");
+        Page<TutorialResponse> page = tutorialService.getPublishedTutorials(pageable);
+        if (page.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/tutorials")
-    public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false)String title){
-
-        try{
-            List<Tutorial> tutorials =new ArrayList<Tutorial>();
-            if(title==null){
-                tutorialRepository.findAll().forEach(tutorials::add);
-            }
-            else{
-                tutorialRepository.findByTitleContaining(title).forEach(tutorials::add);
-            }
-            if (tutorials.isEmpty()){
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(tutorials,HttpStatus.OK);
+    public ResponseEntity<Page<TutorialResponse>> getAllTutorials(
+            @RequestParam(required = false) String title, Pageable pageable) {
+        logger.debug("GET /tutorials (title={})", title);
+        Page<TutorialResponse> page = tutorialService.getAllTutorials(title, pageable);
+        if (page.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
-        catch (Exception e){
-            return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/tutorials/{id}")
-    public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id){
-
-        Optional<Tutorial> tutorialdata= tutorialRepository.findById(id);
-        if(tutorialdata.isPresent()){
-            return new ResponseEntity<>(tutorialdata.get(),HttpStatus.OK);
-        }
-        else{
-            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<TutorialResponse> getTutorialById(@PathVariable long id) {
+        logger.debug("GET /tutorials/{}", id);
+        return ResponseEntity.ok(tutorialService.getTutorialById(id));
     }
 
     @PostMapping("/tutorials")
-    public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial){
-        try{
-            Tutorial _tutorial=tutorialRepository.save(new Tutorial(tutorial.getTitle(),tutorial.getDescription(),false,tutorial.getName()));
-
-            return new ResponseEntity<>(_tutorial,HttpStatus.CREATED);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<TutorialResponse> createTutorial(@Valid @RequestBody TutorialRequest request) {
+        logger.debug("POST /tutorials");
+        return ResponseEntity.status(HttpStatus.CREATED).body(tutorialService.createTutorial(request));
     }
 
     @PutMapping("/tutorials/{id}")
-    public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial){
-
-        Optional<Tutorial> tutorialData=tutorialRepository.findById(id);
-        if(tutorialData.isPresent()){
-            Tutorial updatedTutorial=tutorialData.get();
-            updatedTutorial.setTitle(tutorial.getTitle());
-            updatedTutorial.setDescription(tutorial.getDescription());
-            updatedTutorial.setPublished(tutorial.isPublished());
-            updatedTutorial.setName(tutorial.getName());
-
-            return  new ResponseEntity<>(tutorialRepository.save(updatedTutorial), HttpStatus.OK);
-        }
-
-        else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<TutorialResponse> updateTutorial(
+            @PathVariable long id, @Valid @RequestBody TutorialRequest request) {
+        logger.debug("PUT /tutorials/{}", id);
+        return ResponseEntity.ok(tutorialService.updateTutorial(id, request));
     }
 
     @DeleteMapping("/tutorials/{id}")
-    public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id){
-
-        try{
-            tutorialRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Void> deleteTutorial(@PathVariable long id) {
+        logger.debug("DELETE /tutorials/{}", id);
+        tutorialService.deleteTutorial(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/tutorials")
-     public ResponseEntity<HttpStatus> deleteAllTutorials(){
-        try{
-            tutorialRepository.deleteAll();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Void> deleteAllTutorials() {
+        logger.debug("DELETE /tutorials");
+        tutorialService.deleteAllTutorials();
+        return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/tutorials/published")
-    public ResponseEntity<List<Tutorial>> findByPublished(){
-        try{
-            List<Tutorial> tutorials=tutorialRepository.findByPublished(true);
-            if(tutorials.isEmpty()){
-                return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return  new ResponseEntity<>(tutorials,HttpStatus.OK);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 }
