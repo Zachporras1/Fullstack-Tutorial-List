@@ -29,6 +29,7 @@ describe('ToastComponent', () => {
     fixture.detectChanges();
     const el: HTMLElement = fixture.nativeElement;
     expect(el.textContent).toContain('Saved!');
+    tick(3500);
   }));
 
   it('should show error toast with alert-danger class', fakeAsync(() => {
@@ -37,6 +38,7 @@ describe('ToastComponent', () => {
     fixture.detectChanges();
     const alertEl = fixture.nativeElement.querySelector('.alert-danger');
     expect(alertEl).toBeTruthy();
+    tick(3500);
   }));
 
   it('dismiss() should remove toast from list', fakeAsync(() => {
@@ -45,7 +47,7 @@ describe('ToastComponent', () => {
     fixture.detectChanges();
     expect(component.toasts.length).toBe(1);
     component.dismiss(component.toasts[0].id);
-    tick();
+    tick(3500);
     fixture.detectChanges();
     expect(component.toasts.length).toBe(0);
   }));
@@ -56,5 +58,6 @@ describe('ToastComponent', () => {
     tick();
     fixture.detectChanges();
     expect(component.toasts.length).toBe(2);
+    tick(3500);
   }));
 });

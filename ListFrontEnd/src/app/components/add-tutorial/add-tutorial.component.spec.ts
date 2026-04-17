@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { of, throwError } from 'rxjs';
 import { AddTutorialComponent } from './add-tutorial.component';
 import { TutorialService } from 'src/app/services/tutorial.service';
@@ -71,10 +72,12 @@ describe('AddTutorialComponent', () => {
   }));
 
   it('saveTutorial should set isLoading=true while request is in flight', () => {
-    tutorialSpy.createTutorial.and.returnValue(of(mockCreated));
+    const pending$ = new Subject<typeof mockCreated>();
+    tutorialSpy.createTutorial.and.returnValue(pending$.asObservable());
     component.tutorial = { title: 'T', description: '', name: 'N' };
     component.saveTutorial();
     expect(component.isLoading).toBeTrue();
+    pending$.complete();
   });
 
   it('newTutorial should reset form to initial state', () => {

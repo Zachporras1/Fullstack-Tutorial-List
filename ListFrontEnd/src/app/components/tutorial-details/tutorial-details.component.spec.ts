@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { TutorialDetailsComponent } from './tutorial-details.component';
@@ -78,6 +78,8 @@ describe('TutorialDetailsComponent', () => {
   });
 
   it('deleteTutorial should delete and show success when confirmed', fakeAsync(() => {
+    const router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.returnValue(Promise.resolve(true));
     spyOn(window, 'confirm').and.returnValue(true);
     component.currentTutorial = { ...mockTutorial };
     tutorialSpy.deleteTutorial.and.returnValue(of(undefined));
