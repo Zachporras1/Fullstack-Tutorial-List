@@ -1,18 +1,22 @@
-button:disabled{
- color: white;
- background-color: gray;
+.list-page {
+  margin-top: 1.5em;
 }
 
-button{
-    background-color: blue;
+.filter-tabs .btn {
+  border-radius: 20px;
 }
 
-.list{
-    margin-top: 2em;
-    text-align: center;
+.list-group-item.active {
+  background-color: #0056b3;
+  border-color: #004085;
 }
 
-.error{
-    color: red;
-    font-weight: bold;
+.empty-state {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 2em;
+  background: rgba(255, 255, 255, 0.3);
 }
+
+.badge-success { background-color: #28a745; }
+.badge-secondary { background-color: #6c757d; }

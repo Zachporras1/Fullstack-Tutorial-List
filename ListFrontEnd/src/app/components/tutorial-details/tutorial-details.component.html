@@ -1,64 +1,78 @@
 <div *ngIf="viewMode; else editable">
-    <div class="click-details" *ngIf="currentTutorial.id">
-        <h4>Tutorial</h4>
-        <div>
-            <label class="title-label"> Title: </label>
-            <p>{{currentTutorial.title}}</p>
-        </div>
-        <div>
-            <label class="title-label"> Description:</label>
-            <p> {{currentTutorial.description}}</p>
-        </div>
-        <div>
-            <label class="title-label"> Status:</label>
-            <p>{{currentTutorial.published? "Published":"Pending"}}</p>
-        </div>
-        <div>
-            <label class="title-">Name:</label>
-            <p>{{currentTutorial.name}}</p>
-        </div>
-        <a routerLink="/tutorials/{{currentTutorial.id}}" class="badge badge-warning">Edit</a>
-    </div>
 
-    <div *ngIf="!currentTutorial">
-        <br>
-        <p>Please Click on a Tutorial......</p>
+  <div class="click-details" *ngIf="currentTutorial.id">
+    <h4>Tutorial Details</h4>
+    <div class="detail-row">
+      <label class="title-label">Title:</label>
+      <p>{{ currentTutorial.title }}</p>
     </div>
+    <div class="detail-row">
+      <label class="title-label">Description:</label>
+      <p>{{ currentTutorial.description || '—' }}</p>
+    </div>
+    <div class="detail-row">
+      <label class="title-label">Status:</label>
+      <span class="badge" [class.badge-success]="currentTutorial.published" [class.badge-secondary]="!currentTutorial.published">
+        {{ currentTutorial.published ? 'Published' : 'Draft' }}
+      </span>
+    </div>
+    <div class="detail-row">
+      <label class="title-label">Author:</label>
+      <p>{{ currentTutorial.name }}</p>
+    </div>
+    <a [routerLink]="['/tutorials', currentTutorial.id]" class="btn btn-sm btn-warning mt-2">Edit</a>
+  </div>
+
+  <div *ngIf="!currentTutorial.id" class="text-center text-muted py-4">
+    <p>Select a tutorial to view details.</p>
+  </div>
+
 </div>
 
 <ng-template #editable>
-    <div *ngIf="currentTutorial.id" class="edit-form">
-        <h4>Update Tutorial</h4>
 
-        <form>
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" class="form-control" id="title" [(ngModel)]="currentTutorial.title" name="title">
-            </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <input class="form-control" type="text" name="description" id="description" [(ngModel)]="currentTutorial.description">
-            </div>
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" class="form-control" name="name" id="name" [(ngModel)]="currentTutorial.name">
-            </div>
-            <div class="form-group">
-                <label> Status: </label>
-             <p id="published">  {{currentTutorial.published? "Published": "Pending"}} </p>
-            </div>
-        </form>
-        <button class="badge badge-primary mr-2" *ngIf="currentTutorial.published"
-            (click)="updatePublished(false)">UnPublish</button>
-        <button class="badge badge-primary mr-2" *ngIf="!currentTutorial.published" (click)="updatePublished(true)">
-            Publish </button>
-        <button class="badge badge-primary mr-2" (click)="deleteTutorial()"> Delete</button>
-        <button class="badge badge-success mb-2" type="submit" (click)="updateTutorial()"> Update </button>
-        <p> {{message}}</p>
+  <div *ngIf="isLoading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
     </div>
-    <div *ngIf="!currentTutorial.id">
-        <br>
-        <p> Cannot Access this tutorial...</p>
+  </div>
 
+  <div *ngIf="!isLoading && currentTutorial.id" class="edit-form">
+    <h4>Update Tutorial</h4>
+
+    <form>
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" [(ngModel)]="currentTutorial.title" name="title" />
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" id="description" [(ngModel)]="currentTutorial.description" name="description" />
+      </div>
+      <div class="form-group">
+        <label for="name">Author</label>
+        <input type="text" class="form-control" id="name" [(ngModel)]="currentTutorial.name" name="name" />
+      </div>
+      <div class="form-group">
+        <label>Status:</label>
+        <span class="badge ml-2" [class.badge-success]="currentTutorial.published" [class.badge-secondary]="!currentTutorial.published">
+          {{ currentTutorial.published ? 'Published' : 'Draft' }}
+        </span>
+      </div>
+    </form>
+
+    <div class="action-buttons mt-3">
+      <button class="btn btn-sm btn-primary mr-2" *ngIf="currentTutorial.published" (click)="updatePublished(false)">Unpublish</button>
+      <button class="btn btn-sm btn-success mr-2" *ngIf="!currentTutorial.published" (click)="updatePublished(true)">Publish</button>
+      <button class="btn btn-sm btn-success mr-2" (click)="updateTutorial()">Update</button>
+      <button class="btn btn-sm btn-danger" (click)="deleteTutorial()">Delete</button>
     </div>
+
+    <p class="text-success mt-2" *ngIf="message">{{ message }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !currentTutorial.id" class="text-center text-muted py-4">
+    <p>Tutorial not found.</p>
+  </div>
+
 </ng-template>

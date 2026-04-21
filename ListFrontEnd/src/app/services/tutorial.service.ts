@@ -1,53 +1,50 @@
 import { Injectable } from '@angular/core';
-import { Tutorial } from '../models/tutorial.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Page, Tutorial } from '../models/tutorial.model';
+import { environment } from 'src/environments/environment';
 
-const baseUrl='http://localhost:8080/api/tutorials';
+const baseUrl = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
 export class TutorialService {
 
-  constructor(private httpClient: HttpClient) { 
+  constructor(private http: HttpClient) {}
+
+  getAll(page = 0, size = 10): Observable<Page<Tutorial>> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<Page<Tutorial>>(baseUrl, { params });
   }
 
-  getAll():Observable<Tutorial[]>{
-
-    return this.httpClient.get<Tutorial[]>(baseUrl);
+  getById(id: number): Observable<Tutorial> {
+    return this.http.get<Tutorial>(`${baseUrl}/${id}`);
   }
 
-  getById(id:any):Observable<Tutorial>{
-
-    return this.httpClient.get(`${baseUrl}/${id}`);
+  getPublished(page = 0, size = 10): Observable<Page<Tutorial>> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<Page<Tutorial>>(`${baseUrl}/published`, { params });
   }
 
-  createTutorial(tutorial:any):Observable<any>{
-    return this.httpClient.post(baseUrl,tutorial);
-
+  createTutorial(tutorial: Omit<Tutorial, 'id'>): Observable<Tutorial> {
+    return this.http.post<Tutorial>(baseUrl, tutorial);
   }
 
-  updateTutorial(id:any, tutorial:any):Observable<any>{
-
-    return this.httpClient.put(`${baseUrl}/${id}`,tutorial);
+  updateTutorial(id: number, tutorial: Partial<Tutorial>): Observable<Tutorial> {
+    return this.http.put<Tutorial>(`${baseUrl}/${id}`, tutorial);
   }
 
-  deleteTutorial(id:any):Observable<any>{
-
-    return this.httpClient.delete(`${baseUrl}/${id}`)
+  deleteTutorial(id: number): Observable<void> {
+    return this.http.delete<void>(`${baseUrl}/${id}`);
   }
 
-  deleteAllTutorials():Observable<any>{
-
-    return this.httpClient.delete(baseUrl);
-  
+  deleteAllTutorials(): Observable<void> {
+    return this.http.delete<void>(baseUrl);
   }
 
-  findbyTitle(title:any):Observable<Tutorial[]>{
-
-    return this.httpClient.get<Tutorial[]>(`${baseUrl}?title=${title}`)
+  findbyTitle(title: string, page = 0, size = 10): Observable<Page<Tutorial>> {
+    const params = new HttpParams().set('title', title).set('page', page).set('size', size);
+    return this.http.get<Page<Tutorial>>(baseUrl, { params });
   }
-
-  
 }

@@ -1,31 +1,18 @@
-package com.ust.backendlistdata.model;
+package com.ust.backendlistdata.dto;
 
-import javax.persistence.*;
+public class TutorialResponse {
 
-@Entity
-@Table(name = "tutorials")
-public class Tutorial {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Column(name = "title", nullable = false, length = 100)
     private String title;
-
-    @Column(name = "description", length = 500)
     private String description;
-
-    @Column(name = "published")
     private boolean published;
-
-    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    public Tutorial() {
+    public TutorialResponse() {
     }
 
-    public Tutorial(String title, String description, boolean published, String name) {
+    public TutorialResponse(Long id, String title, String description, boolean published, String name) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.published = published;
@@ -70,11 +57,5 @@ public class Tutorial {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Tutorial{id=" + id + ", title='" + title + "', description='" + description +
-                "', published=" + published + ", name='" + name + "'}";
     }
 }
