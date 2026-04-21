@@ -41,11 +41,11 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!-- H2 in-memory DB used only during tests — no MySQL needed in CI -->
+        <!-- H2 in-memory DB: test scope for CI, runtime scope allows local 'local' profile -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
         <!-- Auto-generates Swagger UI at /swagger-ui.html -->
         <dependency>
